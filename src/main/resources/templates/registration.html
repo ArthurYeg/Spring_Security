@@ -7,13 +7,17 @@
 <body>
 <h2>Registration</h2>
 </div>
-<form action="#" th:action="@{/admin/registration}" th:object="${user}" method="post">
+<form action="#" th:action="@{/admin/registration}" th:object="${user}" method="post"><br>
     <label for="username">Name</label>
+    <form action="#" th:action="@{/admin/registration}" th:object="${user}" method="post">
+        <form action="#" th:action="@{/admin/registration}" th:object="${user}" method="post">
     <input type="text" th:field="*{username}" id="username" placeholder="Name"><br>
     <label for="password">password</label>
+        <form action="#" th:action="@{/admin/registration}" th:object="${user}" method="post">
     <input type="text" th:field="*{password}" id="password" placeholder="password"><br>
     <label for="age">age</label>
-    <input type="text" th:field="*{age}" id="age" placeholder="age">
+            <form action="#" th:action="@{/admin/registration}" th:object="${user}" method="post">
+    <input type="text" th:field="*{age}" id="age" placeholder="age"><br>
     <p>
         <label>Roles:
             <input type="checkbox" name="role"
