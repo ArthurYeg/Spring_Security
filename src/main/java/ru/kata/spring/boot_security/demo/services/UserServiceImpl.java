@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.service;
+package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -26,10 +26,10 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserDetailsService, UserService {
 
     private UserRepository userRepository;
-    private ru.kata.spring.boot_security.demo.service.RoleServiceImpl roleService;
+    private ru.kata.spring.boot_security.demo.services.RoleServiceImpl roleService;
 
     @Autowired
-    public void setUserRepository(UserRepository userRepository, ru.kata.spring.boot_security.demo.service.RoleServiceImpl roleService) {
+    public void setUserRepository(UserRepository userRepository, ru.kata.spring.boot_security.demo.services.RoleServiceImpl roleService) {
         this.userRepository = userRepository;
         this.roleService = roleService;
     }

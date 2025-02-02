@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
+import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,10 +16,10 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
     public final UserServiceImpl userServiceImpl;
-    private final ru.kata.spring.boot_security.demo.service.RoleServiceImpl roleServiceImpl;
+    private final ru.kata.spring.boot_security.demo.services.RoleServiceImpl roleServiceImpl;
 
     @Autowired
-    public AdminController(UserServiceImpl userServiceImpl, ru.kata.spring.boot_security.demo.service.RoleServiceImpl roleServiceImpl) {
+    public AdminController(UserServiceImpl userServiceImpl, ru.kata.spring.boot_security.demo.services.RoleServiceImpl roleServiceImpl) {
         this.userServiceImpl = userServiceImpl;
         this.roleServiceImpl = roleServiceImpl;
     }
