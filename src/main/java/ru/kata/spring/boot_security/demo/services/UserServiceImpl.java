@@ -1,66 +1,94 @@
-package ru.kata.spring.boot_security.demo.services;
+package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
+import ru.kata.spring.boot_security.demo.services.UserService;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserDetailsService, UserService {
+
     private UserRepository userRepository;
+    private ru.kata.spring.boot_security.demo.service.RoleServiceImpl roleService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public void setUserRepository(UserRepository userRepository, ru.kata.spring.boot_security.demo.service.RoleServiceImpl roleService) {
         this.userRepository = userRepository;
+        this.roleService = roleService;
     }
 
     @Override
-    public List<User> index() {
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = findByUsername(username);
+        if(user == null) {
+            throw new UsernameNotFoundException(String.format("User '%s' not found", username));
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                mapRolesToAuthorities(user.getRoles()));
+    }
+
+    // из пачки ролей делаем пачку authority
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public List <Role> getSetOfRoles (List <String> rolesId) {
+        List<Role> roleSet = new ArrayList<>();
+        for (String id : rolesId) {
+            roleSet.add(roleService.getRoleById(Integer.parseInt(id)));
+        }
+        return roleSet;
+    }
+
+    public String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
+    @Override
+    public List<User> listUser () {
         return userRepository.findAll();
     }
 
     @Override
-    public User show(int id) {
-        Optional<User> foundUser = userRepository.findById(id);
-        return foundUser.orElse(null);
-    }
-
-    @Override
-    @Transactional
-    public void save(User user) {
+    public void addUser (User user) {
         userRepository.save(user);
     }
 
     @Override
-    @Transactional
-    public void update(int id, User updatedUser) {
-        updatedUser.setId(id);
-        userRepository.save(updatedUser);
-    }
-
-    @Override
-    @Transactional
-    public void delete(int id) {
+    public void removeUser (int id) {
         userRepository.deleteById(id);
     }
 
     @Override
-    public Optional<User> findByName(String name) {
-        return userRepository.findByName(name);
+    public void updateUser (User user) {
+        userRepository.saveAndFlush(user);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByName(username);
-        if (user.isEmpty())
-            throw new UsernameNotFoundException("User not found");
-
-        return user.get();
+    public User getUserById (int id) {
+        return userRepository.findById(id).orElse(null);
     }
 }
