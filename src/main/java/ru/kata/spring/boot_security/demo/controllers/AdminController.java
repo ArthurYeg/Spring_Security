@@ -25,17 +25,17 @@ public class AdminController {
         this.roleServiceImpl = roleServiceImpl;
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/")
     public String getAllUsers(Model model) {
         model.addAttribute("allUsers", userServiceImpl.listUser());
         return "admin";
     }
-    @GetMapping("/admin/delete/{id}")
+    @GetMapping("delete/{id}")
     public String deleteUser (@PathVariable ("id") int id) {
         userServiceImpl.removeUser(id);
         return "redirect:/admin";
     }
-    @GetMapping("/admin/update/{id}")
+    @GetMapping("update/{id}")
     public String updateUserForm (@PathVariable ("id") int id, Model model) {
         model.addAttribute("update", userServiceImpl.getUserById(id));
         model.addAttribute("allRole", roleServiceImpl.getRoleList());
@@ -49,13 +49,13 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/registration")
+    @GetMapping("registration")
     public String registration (Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("allRoles", roleServiceImpl.getRoleList());
         return "registration";
     }
-    @PostMapping("/admin/registration")
+    @PostMapping("registration")
     public String addUser (@ModelAttribute ("user") User user, @RequestParam ("role") List<String> role) {
         Collection<Role> roleList = userServiceImpl.getSetOfRoles(role);
         user.setRoles(roleList);
