@@ -17,19 +17,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Role implements GrantedAuthority {
 
-    public Role(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
 
     @Override
     public String getAuthority() {
         return getName();
+    }
+    public Role(String name) {
+        this.name = name;
     }
 }

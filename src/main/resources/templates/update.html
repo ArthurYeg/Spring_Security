@@ -1,21 +1,28 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<title>Create user</title>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Update User</title>
 </head>
 <body>
+<br/>
 <form action="#" th:action="@{/admin/update}" th:object="${update}" method="post">
     <label for="id">Id</label>
     <input readonly type="number" th:field="*{id}" id="id" placeholder="Id">
     <br/>
+    <br/>
     <label for="username">Username</label>
     <input type="text" th:field="*{username}" id="username" placeholder="Username">
-    <br/>
+    <div th:if="${#fields.hasErrors('username')}" style="color:red;">
+        <p th:each="err : ${#fields.errors('username')}" th:text="${err}"></p>
+    </div>
     <label for="password">Password</label>
-    <input type="text" th:field="*{password}" id="password" placeholder="Password">
+    <input type="password" th:field="*{password}" id="password" placeholder="Password"> <br/>
     <br/>
     <label for="age">Enter age:</label>
     <input type="text" th:field="*{age}" id="age"/>
     <br/>
+
     <p>
         <label>Roles:
             <input type="checkbox" name="roleList"
@@ -25,6 +32,7 @@
                    th:checked="${update.roles.contains(role)}"/>
         </label>
     </p>
+
     <input type="submit" value="Update User">
 </form>
 </body>

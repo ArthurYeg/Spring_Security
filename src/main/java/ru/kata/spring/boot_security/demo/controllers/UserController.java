@@ -4,16 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import ru.kata.spring.boot_security.demo.services.UserService;
+import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
 
 
 @Controller
 public class UserController {
-    public final ru.kata.spring.boot_security.demo.services.UserServiceImpl userServiceImpl;
+   private final UserServiceImpl userServiceImpl;
 
 
     @Autowired
-    public UserController(ru.kata.spring.boot_security.demo.services.UserServiceImpl userServiceImpl) {
+    public UserController(UserServiceImpl userServiceImpl) {
         this.userServiceImpl = userServiceImpl;
     }
 

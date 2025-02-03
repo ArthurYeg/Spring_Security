@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.services.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
 
 import java.util.Collection;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
     public final UserServiceImpl userServiceImpl;
-    private final ru.kata.spring.boot_security.demo.services.RoleServiceImpl roleServiceImpl;
+    private final RoleServiceImpl roleServiceImpl;
 
     @Autowired
     public AdminController(UserServiceImpl userServiceImpl, ru.kata.spring.boot_security.demo.services.RoleServiceImpl roleServiceImpl) {
@@ -29,12 +30,12 @@ public class AdminController {
         model.addAttribute("allUsers", userServiceImpl.listUser());
         return "/admin";
     }
-    @GetMapping ("/delete/{id}")
+    @GetMapping ("/admin/delete/{id}")
     public String deleteUser (@PathVariable ("id") int id) {
         userServiceImpl.removeUser(id);
         return "redirect:/admin";
     }
-    @GetMapping ("/update/{id}")
+    @GetMapping ("/admin/update/{id}")
     public String updateUserForm (@PathVariable ("id") int id, Model model) {
         model.addAttribute("update", userServiceImpl.getUserById(id));
         model.addAttribute("allRole", roleServiceImpl.getRoleList());
@@ -47,7 +48,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping ("/registration")
+    @GetMapping ("/admin/registration")
     public String registration (Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("allRoles", roleServiceImpl.getRoleList());

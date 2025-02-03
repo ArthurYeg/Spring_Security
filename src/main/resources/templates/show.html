@@ -1,12 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-  <meta charset="UTF-8">
-  <title>Show info</title>
-</head>
-<body>
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
   <meta charset="UTF-8">
   <title>Show info</title>
@@ -25,14 +18,12 @@
   <tr>
     <td th:text="${user.username}"></td>
     <td th:text="${user.password}"></td>
-
   </tr>
   </tbody>
 </table>
-<h4><a href="/login">Войти</a></h4>
-<h4><a href="/admin">В админку</a></h4>
-<h4><a href="/show">В профиль</a></h4>
-<h4><a href="/logout">Выйти</a></h4>
-</div>
+<h4><a th:href="/login}">Login</a></h4>
+<h4><a th:href="{/admin}">To the admin panel</a></h4>
+<h4><a th:href="{/show}">In profile</a></h4>
+<h4><a th:href="{/logout}">Log out</a></h4>
 </body>
 </html>

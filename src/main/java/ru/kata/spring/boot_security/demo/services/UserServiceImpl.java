@@ -8,44 +8,43 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
-import ru.kata.spring.boot_security.demo.services.UserService;
-
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserDetailsService, UserService {
+public class UserServiceImpl implements UserService , UserDetailsService {
 
     private UserRepository userRepository;
-    private ru.kata.spring.boot_security.demo.services.RoleServiceImpl roleService;
+    private RoleService roleService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public void setUserRepository(UserRepository userRepository, ru.kata.spring.boot_security.demo.services.RoleServiceImpl roleService) {
+    public void setUserRepository(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
-        if(user == null) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));
     }
 
-    // из пачки ролей делаем пачку authority
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
@@ -54,7 +53,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return userRepository.findByUsername(username);
     }
 
-    public List <Role> getSetOfRoles (List <String> rolesId) {
+    public List<Role> getSetOfRoles(List<String> rolesId) {
         List<Role> roleSet = new ArrayList<>();
         for (String id : rolesId) {
             roleSet.add(roleService.getRoleById(Integer.parseInt(id)));
@@ -68,27 +67,35 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public List<User> listUser () {
+    public List<User> listUser() {
         return userRepository.findAll();
     }
 
     @Override
-    public void addUser (User user) {
+    public void addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
-    @Override
-    public void removeUser (int id) {
-        userRepository.deleteById(id);
-    }
-
-    @Override
-    public void updateUser (User user) {
+        @Override
+    public void updateUser(User user) {
+        if (!user.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        } else {
+            User existingUser = userRepository.findById(user.getId()).orElse(null);
+            if (existingUser != null) {
+                user.setPassword(existingUser.getPassword());
+            }
+        }
         userRepository.saveAndFlush(user);
     }
 
     @Override
-    public User getUserById (int id) {
+    public User getUserById(int id) {
         return userRepository.findById(id).orElse(null);
+    }
+    @Override
+    public void removeUser(int id) {
+        userRepository.deleteById(id);
     }
 }
