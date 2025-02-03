@@ -20,46 +20,48 @@ public class AdminController {
     private final RoleServiceImpl roleServiceImpl;
 
     @Autowired
-    public AdminController(UserServiceImpl userServiceImpl, ru.kata.spring.boot_security.demo.services.RoleServiceImpl roleServiceImpl) {
+    public AdminController(UserServiceImpl userServiceImpl, RoleServiceImpl roleServiceImpl) {
         this.userServiceImpl = userServiceImpl;
         this.roleServiceImpl = roleServiceImpl;
     }
 
-    @GetMapping
-    public String getAllUsers (Model model) {
+    @GetMapping("/admin")
+    public String getAllUsers(Model model) {
         model.addAttribute("allUsers", userServiceImpl.listUser());
-        return "/admin";
+        return "admin";
     }
-    @GetMapping ("/admin/delete/{id}")
+    @GetMapping("/admin/delete/{id}")
     public String deleteUser (@PathVariable ("id") int id) {
         userServiceImpl.removeUser(id);
         return "redirect:/admin";
     }
-    @GetMapping ("/admin/update/{id}")
+    @GetMapping("/admin/update/{id}")
     public String updateUserForm (@PathVariable ("id") int id, Model model) {
         model.addAttribute("update", userServiceImpl.getUserById(id));
         model.addAttribute("allRole", roleServiceImpl.getRoleList());
         return "update";
+
     }
-    @PostMapping ("/update")
+    @PostMapping("/update")
     public String updateUser (@ModelAttribute ("update") User user, @RequestParam ("roleList") List<String> role) {
         user.setRoles(userServiceImpl.getSetOfRoles(role));
         userServiceImpl.updateUser(user);
         return "redirect:/admin";
     }
 
-    @GetMapping ("/admin/registration")
+    @GetMapping("/admin/registration")
     public String registration (Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("allRoles", roleServiceImpl.getRoleList());
         return "registration";
     }
-    @PostMapping ("/registration")
+    @PostMapping("/admin/registration")
     public String addUser (@ModelAttribute ("user") User user, @RequestParam ("role") List<String> role) {
         Collection<Role> roleList = userServiceImpl.getSetOfRoles(role);
         user.setRoles(roleList);
         userServiceImpl.addUser(user);
         return "redirect:/admin";
     }
+
 
 }
