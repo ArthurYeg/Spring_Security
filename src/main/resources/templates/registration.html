@@ -20,9 +20,10 @@
     <input type="text" th:field="*{age}" id="age" placeholder="Age"><br>
 
     <p>Roles:</p>
+    <p>Roles:</p>
     <p th:each="role : ${allRoles}">
         <label>
-            <input type="checkbox" th:name="roles" th:value="${role.id}" />
+            <input type="checkbox" th:name="role" th:value="${role.id}" />
             <span th:text="${role.name}"></span>
         </label>
     </p>
