@@ -16,6 +16,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
     public final UserServiceImpl userServiceImpl;
     private final RoleServiceImpl roleServiceImpl;
 
@@ -25,7 +26,7 @@ public class AdminController {
         this.roleServiceImpl = roleServiceImpl;
     }
 
-    @GetMapping("/")
+    @GetMapping("/users")
     public String getAllUsers(Model model) {
         model.addAttribute("allUsers", userServiceImpl.listUser());
         return "admin";
@@ -33,7 +34,7 @@ public class AdminController {
     @GetMapping("delete/{id}")
     public String deleteUser (@PathVariable ("id") int id) {
         userServiceImpl.removeUser(id);
-        return "redirect:/admin";
+        return "redirect:/admin/users";
     }
     @GetMapping("update/{id}")
     public String updateUserForm (@PathVariable ("id") int id, Model model) {
@@ -46,21 +47,21 @@ public class AdminController {
     public String updateUser (@ModelAttribute ("update") User user, @RequestParam ("roleList") List<String> role) {
         user.setRoles(userServiceImpl.getSetOfRoles(role));
         userServiceImpl.updateUser(user);
-        return "redirect:/admin";
+        return "redirect:/admin/users";
     }
 
-    @GetMapping("registration")
+    @GetMapping("add")
     public String registration (Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("allRoles", roleServiceImpl.getRoleList());
-        return "registration";
+        return "add";
     }
-    @PostMapping("registration")
-    public String addUser (@ModelAttribute ("user") User user, @RequestParam ("role") List<String> role) {
+    @PostMapping("/add")
+    public String addUser(@ModelAttribute("user") User user, @RequestParam("role") List<String> role) {
         Collection<Role> roleList = userServiceImpl.getSetOfRoles(role);
         user.setRoles(roleList);
         userServiceImpl.addUser(user);
-        return "redirect:/admin";
+        return "redirect:/admin/users";
     }
 
 

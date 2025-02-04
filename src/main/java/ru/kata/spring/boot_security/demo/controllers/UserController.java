@@ -8,7 +8,7 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
 
 
-@Controller
+@Controller("/user")
 public class UserController {
    private final UserServiceImpl userServiceImpl;
 
@@ -18,14 +18,10 @@ public class UserController {
         this.userServiceImpl = userServiceImpl;
     }
 
-    @GetMapping ("/index")
-    public String loginPage () {
-        return "/index";
-    }
-
-    @GetMapping("/show")
-    public String findUser (Model model) {
-        model.addAttribute("user" , userServiceImpl.loadUserByUsername(userServiceImpl.getCurrentUsername()));
-        return "show";
+    @GetMapping
+    public String getUserInfo (Model model) {
+        model.addAttribute("user", userServiceImpl
+                .loadUserByUsername(userServiceImpl.getCurrentUsername()));
+        return "user";
     }
 }
