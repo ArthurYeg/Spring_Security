@@ -16,13 +16,13 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserService userService; // Внедряем интерфейс
-    private final RoleService roleService; // Внедряем интерфейс
+    private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.roleService = roleService; // Внедрение зависимости через интерфейс
+        this.roleService = roleService;
     }
 
     @GetMapping

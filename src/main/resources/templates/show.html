@@ -16,6 +16,7 @@
   </thead>
   <tbody>
   <tr>
+    <td th:each="user:${users}">
     <td th:text="${user.username}"></td>
     <td th:text="${user.password}"></td>
   </tr>
