@@ -6,7 +6,7 @@
 </head>
 <body>
 <br/>
-<form action="#" th:action="@{/admin/update}" th:object="${update}" method="post">
+<form action="#" th:action="@{/admin/update}" th:object="${user}" method="post">
     <label for="id">Id</label>
     <input readonly type="number" th:field="*{id}" id="id" placeholder="Id">
     <br/>
@@ -23,13 +23,15 @@
     <input type="text" th:field="*{age}" id="age"/>
     <br/>
 
-    <p>
-        <label>Roles:
-            <input type="checkbox" name="roleList"
-                   th:each="role : ${allRole}"
-                   th:text="${role.name}"
-                   th:value="${role.id}"
-                   th:checked="${update.roles.contains(role)}"/>
+    <p th:each="role : ${allRoles}">
+        <input
+                type="checkbox"
+                name="roleList"
+                th:id="'role' + ${role.getId()}"
+                th:value="${role.getId()}"
+                th:checked = "${user.getRoles().contains(role)}"
+        />
+        <label th:for="'role' + ${role.getId()}" th:text="${role.getAuthority()}">
         </label>
     </p>
 

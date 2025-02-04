@@ -21,11 +21,11 @@ public class AdminController {
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {
-        this.userService = userService; // Внедрение зависимости через интерфейс
+        this.userService = userService;
         this.roleService = roleService; // Внедрение зависимости через интерфейс
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public String getAllUsers(Model model) {
         model.addAttribute("allUsers", userService.listUser ());
         return "admin";
@@ -34,21 +34,21 @@ public class AdminController {
     @GetMapping("delete/{id}")
     public String deleteUser (@PathVariable("id") int id) {
         userService.removeUser (id);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 
     @GetMapping("update/{id}")
     public String updateUserForm(@PathVariable("id") int id, Model model) {
-        model.addAttribute("update", userService.getUserById(id));
+        model.addAttribute("user", userService.getUserById(id));
         model.addAttribute("allRoles", roleService.getRoleList());
         return "update";
     }
 
     @PostMapping("/update")
-    public String updateUser (@ModelAttribute("update") User user, @RequestParam("roleList") List<String> role) {
+    public String updateUser (@ModelAttribute("user") User user, @RequestParam("roleList") List<String> role) {
         user.setRoles(userService.getSetOfRoles(role));
         userService.updateUser (user);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 
     @GetMapping("add")
@@ -65,6 +65,6 @@ public class AdminController {
             user.setRoles(roleList);
         }
         userService.addUser (user);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 }
