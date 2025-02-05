@@ -11,7 +11,9 @@
   <thead>
   <tr>
     <th>Username</th>
+    <th>Name</th>
     <th>Password</th>
+    <th>Age</th>
   </tr>
   </thead>
   <tbody>
@@ -19,7 +21,9 @@
 
     <td th:each="user:${users}">
     <td th:text="${user.username}"></td>
+    <td th:text="${user.name}"></td>
     <td th:text="${user.password}"></td>
+    <td th:text="${user.age}"></td>
   </tr>
   </tbody>
 </table>

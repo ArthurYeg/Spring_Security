@@ -17,6 +17,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String username;
+    private String name;
     private String password;
     private Integer age;
 
@@ -67,7 +68,13 @@ public class User implements UserDetails {
     public void setUsername(String username) {
         this.username = username;
     }
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
     public String getPassword() {
         return password;
     }
@@ -91,4 +98,5 @@ public class User implements UserDetails {
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
+
 }
