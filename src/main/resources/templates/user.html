@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
   <meta charset="UTF-8">
-  <title>Show info</title>
+  <title>User info</title>
 </head>
 <body>
 <h2 align="center">Profile info:</h2>
@@ -23,9 +23,9 @@
   </tr>
   </tbody>
 </table>
-<h4><a th:href="@/login}">Login</a></h4>
+<h4><a th:href="@{/login}">Login</a></h4>
 <h4><a th:href="@{/admin}">To the admin panel</a></h4>
-<h4><a th:href="@{/show}">In profile</a></h4>
+<h4><a th:href="@{/user}">In profile</a></h4>
 <h4><a th:href="@{/logout}">Log out</a></h4>
 </body>
 </html>
